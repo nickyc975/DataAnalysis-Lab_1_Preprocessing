@@ -1,0 +1,8 @@
+# directories
+.gradle/
+data/
+build/
+out/
+
+# files
+.idea/workspace.xml
