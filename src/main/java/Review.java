@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.hadoop.io.Writable;
 
-public class Review implements Writable {
+public class Review implements Writable, Cloneable {
     private static final Map<String, String> MONTHS;
     private static final String TEMPLATE = "%s|%f|%f|%f|%s|%s|%f|%s|%s|%s|%s|%f";
 
@@ -76,6 +76,11 @@ public class Review implements Writable {
                 this.temperature, this.rating, this.user_id, this.user_birthday, this.user_nationality,
                 this.user_career, this.user_income
         );
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
