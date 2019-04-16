@@ -1,7 +1,8 @@
 # directories
 .gradle/
-data/
+bin/
 build/
+data/
 out/
 
 # files
