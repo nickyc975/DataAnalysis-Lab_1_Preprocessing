@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
 
 public class Review implements Writable {
     private static final Map<String, String> MONTHS;
-    private static final String TEMPLATE = "%s|%f|%f|%f|%s|%s|%f|%s|%s|%s|%s|%f\n";
+    private static final String TEMPLATE = "%s|%f|%f|%f|%s|%s|%f|%s|%s|%s|%s|%f";
 
     static {
         MONTHS = new HashMap<>();
@@ -42,7 +42,7 @@ public class Review implements Writable {
     public Review() {
     }
 
-    public void readFields(String str) {
+    public void fromString(String str) {
         String[] parts = str.split("\\|");
         this.review_id = parts[0];
         this.longitude = Double.parseDouble(parts[1]);
@@ -70,22 +70,44 @@ public class Review implements Writable {
     }
 
     @Override
-    public void readFields(DataInput input) throws IOException {
-        this.readFields(input.readLine());
-    }
-
-    @Override
-    public void write(DataOutput output) throws IOException {
-        output.writeBytes(this.toString());
-    }
-
-    @Override
     public String toString() {
         return String.format(TEMPLATE, 
                 this.review_id, this.longitude, this.latitude, this.altitude, this.review_date,
                 this.temperature, this.rating, this.user_id, this.user_birthday, this.user_nationality,
                 this.user_career, this.user_income
         );
+    }
+
+    @Override
+    public void readFields(DataInput input) throws IOException {
+        this.review_id = input.readUTF();
+        this.longitude = input.readDouble();
+        this.latitude = input.readDouble();
+        this.altitude = input.readDouble();
+        this.review_date = input.readUTF();
+        this.temperature = input.readUTF();
+        this.rating = input.readDouble();
+        this.user_id = input.readUTF();
+        this.user_birthday = input.readUTF();
+        this.user_nationality = input.readUTF();
+        this.user_career = input.readUTF();
+        this.user_income = input.readDouble();
+    }
+
+    @Override
+    public void write(DataOutput output) throws IOException {
+        output.writeUTF(this.review_id);
+        output.writeDouble(this.longitude);
+        output.writeDouble(this.latitude);
+        output.writeDouble(this.altitude);
+        output.writeUTF(this.review_date);
+        output.writeUTF(this.temperature);
+        output.writeDouble(this.rating);
+        output.writeUTF(this.user_id);
+        output.writeUTF(this.user_birthday);
+        output.writeUTF(this.user_nationality);
+        output.writeUTF(this.user_career);
+        output.writeDouble(this.user_income);
     }
 
     public static Review read(DataInput input) throws IOException {
